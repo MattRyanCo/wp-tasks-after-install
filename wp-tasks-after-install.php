@@ -1,17 +1,21 @@
 <?php
 /**
  * Plugin Name: WP Tasks After Install Modified
- * Plugin URI: https://github.com/stingray82/WP-Tasks-After-Install
+ * Plugin URI: https://github.com/MattRyanCo/wp-tasks-after-install
  * Description: Performs a number of necessary tasks after installing WordPress.
- * Author: Stingray82 / Oh Yeah Devs 
- * Author URI: https://github.com/stingray82/WP-Tasks-After-Install
- * Version: 2.4
+ * Author: Matt Ryan / Stingray82 / Oh Yeah Devs
+ * Author URI: https://github.com/MattRyanCo/wp-tasks-after-install
+ * Version: 2.4.1
  * License: GPLv2 or later
  * Text Domain: wp-tasks-after-install
  * Domain Path: /languages/
+ * GitHub Plugin URI: MattRyanCo/wp-tasks-after-install
  */
 
-/* This plugin is based on the original plugin here  * Based on https://wordpress.org/plugins/wp-tasks-after-install it has been very heavily modified and updated */
+/**
+ * This plugin is based on the original plugin here  * Based on https://wordpress.org/plugins/wp-tasks-after-install it has been very heavily modified and updated 
+ * Forked from https://github.com/stingray82/WP-Tasks-After-Install and modified for use by Cap Web Solutions. 
+ */
 
 // Go away!!
 if ( ! defined( 'WPINC' ) ) {
@@ -19,31 +23,31 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 // Adds plugin internationalization
-function oaf_wptai_i18n() {
+function mrco_wptai_i18n() {
 	load_plugin_textdomain( 'wp-tasks-after-install', FALSE, basename(dirname( __FILE__ ) ) . '/languages/' );
 }//end plugin_name_i18n()
 
-add_action( 'plugins_loaded', 'oaf_wptai_i18n' );
+add_action( 'plugins_loaded', 'mrco_wptai_i18n' );
 
-add_action( 'admin_init', 'oaf_wptai_remove_default_post');
-add_action( 'admin_init', 'oaf_wptai_remove_default_page'); // Removed the privacy page //
-add_action( 'admin_init', 'oaf_wptai_time'); // Add Timezone to London and Date to UK Format i.e 17th June 2022
-add_action( 'admin_init', 'oaf_wptai_change_uncategorized');
-add_action( 'admin_init', 'oaf_wptai_set_permalink_postname' );
-add_action( 'admin_init', 'oaf_wptai_delete_plugins' );
-add_action( 'admin_init', 'oaf_wptai_disable_comments_and_pings' ); // Search Enginee Added
-add_action( 'admin_init', 'oaf_wptai_delete_config_sample_file' );
-add_action( 'admin_init', 'oaf_wptai_delete_readme_html_file' );
-add_action( 'admin_init', 'oaf_wptai_delete_themes' );
-add_action('plugins_loaded', 'oaf_wptai_disable_screen_options_preserve'); // Disable Screen Options
-add_action( 'admin_init', 'oaf_wptai_disable_thumbnail_sizes' );
-add_action( 'admin_init', 'oaf_wptai_media_settings' );
-add_action( 'admin_init', 'oaf_wptai_disable_patten_guide' ); // Added in Wordpress 6.7 Toggle That Switch
-add_action('init', 'oaf_wptai_disable_avatars_in_discussion_settings'); // Disable Avatars
-add_action( 'admin_init', 'oaf_wptai_deactivate_this_plugin' );
+add_action( 'admin_init', 'mrco_wptai_remove_default_post');
+add_action( 'admin_init', 'mrco_wptai_remove_default_page'); // Removed the privacy page //
+add_action( 'admin_init', 'mrco_wptai_time'); // Add Timezone to London and Date to UK Format i.e 17th June 2022
+add_action( 'admin_init', 'mrco_wptai_change_uncategorized');
+add_action( 'admin_init', 'mrco_wptai_set_permalink_postname' );
+add_action( 'admin_init', 'mrco_wptai_delete_plugins' );
+add_action( 'admin_init', 'mrco_wptai_disable_comments_and_pings' ); // Search Enginee Added
+add_action( 'admin_init', 'mrco_wptai_delete_config_sample_file' );
+add_action( 'admin_init', 'mrco_wptai_delete_readme_html_file' );
+add_action( 'admin_init', 'mrco_wptai_delete_themes' );
+add_action('plugins_loaded', 'mrco_wptai_disable_screen_options_preserve'); // Disable Screen Options
+add_action( 'admin_init', 'mrco_wptai_disable_thumbnail_sizes' );
+add_action( 'admin_init', 'mrco_wptai_media_settings' );
+add_action( 'admin_init', 'mrco_wptai_disable_patten_guide' ); // Added in Wordpress 6.7 Toggle That Switch
+add_action('init', 'mrco_wptai_disable_avatars_in_discussion_settings'); // Disable Avatars
+add_action( 'admin_init', 'mrco_wptai_deactivate_this_plugin' );
 
 // Remove default post 'Hello Word'
-function oaf_wptai_remove_default_post() {
+function mrco_wptai_remove_default_post() {
 
 	if ( FALSE === get_post_status( 1 ) ) {
 	   	// The post does not exist - do nothing.
@@ -51,10 +55,10 @@ function oaf_wptai_remove_default_post() {
 	   	wp_delete_post(1);
 	}
 
-} // end of oaf_wptai_remove_default_post() function.
+} // end of mrco_wptai_remove_default_post() function.
 
 // Remove the default example page
-function oaf_wptai_remove_default_page() {
+function mrco_wptai_remove_default_page() {
 
 	if ( FALSE === get_post_status( 2 ) ) {
 	   	// The page does not exist - do nothing.
@@ -67,11 +71,11 @@ function oaf_wptai_remove_default_page() {
 	   	wp_delete_post(3);
 	}
 
-} // end of oaf_wptai_remove_default_page() function
+} // end of mrco_wptai_remove_default_page() function
 
 
 // Change the name and slug of default category to General
-function oaf_wptai_change_uncategorized() {
+function mrco_wptai_change_uncategorized() {
 
 	$term = term_exists( __('Uncategorized', 'wp-tasks-after-install', 'wp-tai'), 'category'); // check if 'uncategorized' category exists
 
@@ -82,21 +86,21 @@ function oaf_wptai_change_uncategorized() {
 	  ));
 	}
 
-} // end of oaf_wptai_change_uncategorized() function.
+} // end of mrco_wptai_change_uncategorized() function.
 
 
 // Set permlinks to postname  /%postname%/
-function oaf_wptai_set_permalink_postname() {
+function mrco_wptai_set_permalink_postname() {
 
     global $wp_rewrite;
     $wp_rewrite->set_permalink_structure( '/%postname%/' );
     flush_rewrite_rules(); // Added in 2.32 to try and save having to keep saving permalinks
 
-} // end of oaf_wptai_set_permalink_postname() function.
+} // end of mrco_wptai_set_permalink_postname() function.
 
 
 // remove hello world and akismet plugins // 08-11 Add to remove all the softacculous based plugins!
-function oaf_wptai_delete_plugins() {
+function mrco_wptai_delete_plugins() {
     // List of plugins to check, deactivate, and delete
     $plugins = array(
     	// Base Install / InstaWP
@@ -130,19 +134,42 @@ function oaf_wptai_delete_plugins() {
 
     // After deactivation, delete the plugins
     delete_plugins( $plugins );
-} // End of oaf_wptai_delete_plugins function
+} // End of mrco_wptai_delete_plugins function
 
+function capweb_add_dev_plugins() {
+    // Include necessary WordPress files
+    require_once ABSPATH . 'wp-admin/includes/plugin-install.php';
+    require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
+    require_once ABSPATH . 'wp-admin/includes/file.php';
+    require_once ABSPATH . 'wp-admin/includes/misc.php';
+    require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader-skin.php';
+    
+    // Define the plugins to install
+    $plugins = array(
+        'query-monitor' => 'https://downloads.wordpress.org/plugin/query-monitor.latest-stable.zip',
+        'debug-log-manager' => 'https://downloads.wordpress.org/plugins/debug-log-manager.latest-stable.zip/',
+        'updraftplus' => 'C:\Users\matt\LocalPremiums\UpdraftPlusPro\updraftplus.current.zip'
+    );
+
+    // Instantiate the plugin upgrader
+    $upgrader = new Plugin_Upgrader();
+
+    // Loop through plugins and install them
+    foreach ($plugins as $plugin_name => $plugin_url) {
+        $upgrader->install($plugin_url);
+    }
+}
 
 
 // Set Timezone, Date, and Site Language - Modified 2.0
 /* Version 2.33 Removed Legacy WPLANG and Update Options override's Will now actually download and install lanaguage pack and then set it up for you as instructed and then if successful it will switch update the option and then switch the locale as needed */
-function oaf_wptai_time() {
+function mrco_wptai_time() {
     // Set timezone and date format
-    update_option( 'timezone_string', 'Europe/London' );
-    update_option( 'date_format', 'j F Y' );
+    update_option( 'timezone_string', 'America/New York' );
+    update_option( 'date_format', 'F j, Y' );
 
     // Desired language locale
-    $new_locale = 'en_GB';
+    $new_locale = 'en_US';
 
     // Ensure the translation functions are available
     if ( ! function_exists( 'wp_download_language_pack' ) ) {
@@ -167,12 +194,12 @@ function oaf_wptai_time() {
 
     // Ensure the new locale is loaded immediately
     switch_to_locale( $new_locale );
-} // end of oaf_wptai_time function.
+} // end of mrco_wptai_time function.
 
 
 
 // Disable comments, Search Enginees and trackbacks
-function oaf_wptai_disable_comments_and_pings() {
+function mrco_wptai_disable_comments_and_pings() {
 
 	// Disable pings
 	if( '' != get_option( 'default_ping_status' ) ) {
@@ -189,11 +216,11 @@ function oaf_wptai_disable_comments_and_pings() {
 		update_option( 'blog_public', '' );
 	} // end if
 
-} // end oaf_wptai_disable_comments_and_pings() function.
+} // end mrco_wptai_disable_comments_and_pings() function.
 
 
 // Delete wp-config-sample.php file
-function oaf_wptai_delete_config_sample_file() {
+function mrco_wptai_delete_config_sample_file() {
 
 	$url_config_sample = "wp-config-sample.php";
 	$abspath=$_SERVER['DOCUMENT_ROOT'];
@@ -202,10 +229,10 @@ function oaf_wptai_delete_config_sample_file() {
 	    unlink($file_url);
 	}
 
-} // end of oaf_wptai_delete_config_sample_file() function.
+} // end of mrco_wptai_delete_config_sample_file() function.
 
 // Delete readme.html file
-function oaf_wptai_delete_readme_html_file() {
+function mrco_wptai_delete_readme_html_file() {
 
 	$url_readme_html = "readme.html";
 	$abspath=$_SERVER['DOCUMENT_ROOT'];
@@ -214,11 +241,11 @@ function oaf_wptai_delete_readme_html_file() {
 	    unlink($file_url);
 	}
 
-} // end of oaf_wptai_delete_readme_html_file() function.
+} // end of mrco_wptai_delete_readme_html_file() function.
 
 
 // Remove unactivated themes
-function oaf_wptai_delete_themes() {
+function mrco_wptai_delete_themes() {
 
 	// The current themes.
 	$installed_themes = wp_get_themes();
@@ -244,11 +271,11 @@ function oaf_wptai_delete_themes() {
 		}
 	} // end of foreach - themes
 
-} // end of oaf_wptai_delete_themes() function.
+} // end of mrco_wptai_delete_themes() function.
 
 
 // Disable all default thumbnail sizes and uncheck thumbnail cropping to exact dimensions added 2.0
-function oaf_wptai_disable_thumbnail_sizes() {
+function mrco_wptai_disable_thumbnail_sizes() {
     // Remove default image sizes
     remove_image_size( 'thumbnail' );
     remove_image_size( 'medium' );
@@ -273,7 +300,7 @@ function oaf_wptai_disable_thumbnail_sizes() {
 
 
 // Deactivate this plugin.
-function oaf_wptai_deactivate_this_plugin() {
+function mrco_wptai_deactivate_this_plugin() {
 
 	if ( !function_exists( 'deactivate_plugins' ) ) {
 	    require_once ABSPATH . '/wp-admin/includes/plugin.php';
@@ -285,10 +312,10 @@ function oaf_wptai_deactivate_this_plugin() {
     $plugin_file = plugin_basename(__FILE__); // Get the plugin's relative path
     delete_plugins([$plugin_file]);
 
-} // end of oaf_wptai_deactivate_this_plugin() function.
+} // end of mrco_wptai_deactivate_this_plugin() function.
 
 // Set media upload settings added 2.0
-function oaf_wptai_media_settings() {
+function mrco_wptai_media_settings() {
     // Disable cropping of large images
     update_option( 'big_image_size_threshold', 0 );
 
@@ -297,7 +324,7 @@ function oaf_wptai_media_settings() {
 }
 
 //Added in Wordpress 6.7 remove welcome screen and pattern library
-function oaf_wptai_disable_patten_guide() {
+function mrco_wptai_disable_patten_guide() {
 	global $wpdb;
 
     // Retrieve all users
@@ -346,7 +373,7 @@ function oaf_wptai_disable_patten_guide() {
 // 2.3 Hide widgets and Disable Avatars 
 // Disable individual screen options for all users while preserving existing hidden widgets + Welcome Panel
 // 2.33 Added 'dashboard_rediscache' for GridPane for that Clean Look
-function oaf_wptai_disable_screen_options_preserve() {
+function mrco_wptai_disable_screen_options_preserve() {
     $users = get_users();
 
     // Widgets to hide
@@ -378,7 +405,7 @@ function oaf_wptai_disable_screen_options_preserve() {
 }
 
 
-function oaf_wptai_disable_avatars_in_discussion_settings() {
+function mrco_wptai_disable_avatars_in_discussion_settings() {
     // Update the 'show_avatars' option to '0' (disabled)
     update_option('show_avatars', 0);
 }
