@@ -1,0 +1,6 @@
+{
+    "name": "MattRyanCo/wp-tasks-after-install",
+    "type": "wordpress-plugin",
+    "description": "WordPress tasks to perform after initial install",
+    "license": "GPL-2.0+"
+}
